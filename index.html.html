@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome to Buzzalier's World!</title>
+  <style>
+    body {
+      font-family: 'Comic Sans MS', sans-serif;
+      background: linear-gradient(to right, #fff8dc, #ffe4e1);
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #ffcc00;
+      padding: 1.5rem;
+      text-align: center;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 2.5rem;
+    }
+    nav {
+      background: #ffa500;
+      display: flex;
+      justify-content: center;
+      padding: 1rem 0;
+    }
+    nav a {
+      margin: 0 1rem;
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .hero {
+      text-align: center;
+      padding: 2rem;
+    }
+    .hero img {
+      width: 250px;
+      border-radius: 20px;
+    }
+    .intro {
+      max-width: 800px;
+      margin: auto;
+      padding: 2rem;
+      font-size: 1.2rem;
+      line-height: 1.6;
+    }
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      padding: 2rem;
+    }
+    .feature {
+      background: #fff;
+      border-radius: 15px;
+      padding: 1.5rem;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    footer {
+      background: #333;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.9rem;
+    }
+    .btn {
+      display: inline-block;
+      margin-top: 1rem;
+      padding: 0.7rem 1.2rem;
+      background: #ff69b4;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    #map {
+      height: 600px;
+      width: 100%;
+      margin-top: 2rem;
+    }
+    .popup {
+      position: absolute;
+      background: #fff;
+      border: 2px solid #333;
+      border-radius: 10px;
+      padding: 10px;
+      display: none;
+      z-index: 10;
+    }
+    .popup img {
+      width: 150px;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Buzzalier's World</h1>
+    <p>The groovy bee with a beat in his wings!</p>
+  </header>
+
+  <nav>
+    <a href="#read">Read</a>
+    <a href="#watch">Watch</a>
+    <a href="#play">Play</a>
+    <a href="#parents">For Parents</a>
+  </nav>
+
+  <section class="hero">
+    <img src="buzzalier-hero.png" alt="Buzzalier the Groovy Bee">
+    <h2>Join the buzz – fun stories, songs, and surprises await!</h2>
+  </section>
+
+  <section class="intro">
+    <p>Welcome to Buzzalier's colorful universe – where music meets kindness, and every day is an adventure! Whether you're a parent, teacher, or a curious little bee yourself, there's something sweet and magical here for you.</p>
+  </section>
+
+  <section class="features">
+    <div class="feature" id="read">
+      <h3>📚 Read</h3>
+      <p>Discover rhyming adventures and silly stories that teach kindness, courage, and creativity. Great for ages 4–10!</p>
+      <a href="#" class="btn">Read a Free Story</a>
+    </div>
+    <div class="feature" id="watch">
+      <h3>🎬 Watch</h3>
+      <p>Groove along with Buzzalier’s musical tales and animations – perfect for giggles, dance, and bedtime fun!</p>
+      <a href="#" class="btn">Watch an Episode</a>
+    </div>
+    <div class="feature" id="play">
+      <h3>🎨 Play</h3>
+      <p>Download coloring pages, complete puzzles, and try Buzzalier’s secret missions!</p>
+      <a href="#" class="btn">Get Free Activities</a>
+    </div>
+    <div class="feature" id="parents">
+      <h3>👨‍👩‍👧‍👦 For Parents</h3>
+      <p>Educational content with heart and humor. Download teacher guides, track reading goals, or join our newsletter!</p>
+      <a href="#" class="btn">Join the Hive</a>
+    </div>
+  </section>
+
+  <section class="intro">
+    <h2 style="text-align:center">🌍 Buzzalier's World Map</h2>
+    <div id="map"></div>
+    <div id="popup" class="popup"></div>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 Buzzalier World. All rights reserved. | Created with heart and honey 🐝</p>
+  </footer>
+
+  <script type="module">
+    import * as THREE from 'https://cdn.skypack.dev/three@0.120.1';
+    import { OrbitControls } from 'https://cdn.skypack.dev/three@0.120.1/examples/jsm/controls/OrbitControls.js';
+    import ThreeGlobe from 'https://cdn.skypack.dev/three-globe';
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / 600, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer();
+    renderer.setSize(window.innerWidth, 600);
+    const mapContainer = document.getElementById('map');
+    mapContainer.appendChild(renderer.domElement);
+
+    const popup = document.getElementById('popup');
+    const cities = [
+      { name: 'Tokyo', lat: 35.6895, lng: 139.6917, color: 'red', image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Tokyo_Tower_and_around_Skyscrapers.jpg/640px-Tokyo_Tower_and_around_Skyscrapers.jpg' },
+      { name: 'Paris', lat: 48.8566, lng: 2.3522, color: 'blue', image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Tour_Eiffel_Wikimedia_Commons.jpg/640px-Tour_Eiffel_Wikimedia_Commons.jpg' },
+      { name: 'Milan', lat: 45.4642, lng: 9.19, color: 'green', image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Duomo_di_Milano_June_2015-1a.jpg/640px-Duomo_di_Milano_June_2015-1a.jpg' },
+      { name: 'Venice', lat: 45.4408, lng: 12.3155, color: 'purple', image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Venice_-_Canal_Grande.jpg/640px-Venice_-_Canal_Grande.jpg' }
+    ];
+
+    const globe = new ThreeGlobe()
+      .globeImageUrl('https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg')
+      .pointsData(cities)
+      .pointAltitude(() => 0.1)
+      .pointColor('color')
+      .onPointHover((point) => {
+        if (point) {
+          popup.innerHTML = `<strong>${point.name}</strong><br><img src="${point.image}" alt="${point.name}">`;
+          popup.style.left = (window.innerWidth / 2 + 20) + 'px';
+          popup.style.top = '100px';
+          popup.style.display = 'block';
+        } else {
+          popup.style.display = 'none';
+        }
+      });
+
+    scene.add(globe);
+
+    const ambientLight = new THREE.AmbientLight(0xbbbbbb);
+    scene.add(ambientLight);
+
+    const controls = new OrbitControls(camera, renderer.domElement);
+    camera.position.z = 300;
+    controls.update();
+
+    function animate() {
+      requestAnimationFrame(animate);
+      globe.rotation.y += 0.002;
+      renderer.render(scene, camera);
+    }
+
+    animate();
+  </script>
+</body>
+</html>
